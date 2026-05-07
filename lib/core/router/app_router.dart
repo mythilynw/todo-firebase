@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../views/screens/login_screen.dart';
 import '../../views/screens/register_screen.dart';
 import '../../views/screens/home_screen.dart';
-import '../../views/screens/add_edit_task_screen.dart';
+
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/login',
@@ -41,9 +41,6 @@ final GoRouter appRouter = GoRouter(
       path: '/home',
       builder: (context, state) => const HomeScreen(),
     ),
-    GoRoute(
-      path: '/add-task',
-      builder: (context, state) => const AddEditTaskScreen(),
-    ),
+    
   ],
 );
