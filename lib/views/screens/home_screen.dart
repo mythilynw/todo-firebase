@@ -1,203 +1,256 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../extensions/extensions.dart';
-import '../../models/todo.dart';
-import '../../models/todo_status.dart';
-import '../widgets/todo_tile.dart';
-
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends ConsumerState<HomeScreen> {
-
-  @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() {
-      final user = FirebaseAuth.instance.currentUser;
-
-      if (user != null) {
-        ref.todoActions.loadTodos(userId: user.uid);
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final todos = ref.todos;
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Tasks'),
-      ),
+      backgroundColor: const Color(0xFFF5F7FB),
 
-      body: todos.isEmpty
-          ? const Center(
-              child: Text('No Tasks'),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: todos.length,
-              itemBuilder: (context, index) {
-                final todo = todos[index];
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
 
-                return GestureDetector(
-                  onTap: () => _editTask(todo),
-                  child: TodoTile(
-                    todo: todo,
-                    onStatusChange: (status) {
-                      final updated =
-                          todo.rebuild((b) => b..status = status);
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
 
-                      ref.todoActions.updateTodo(todo: updated);
-                    },
-                    onDelete: () {
-                      ref.todoActions.deleteTodo(id: todo.id);
-                    },
+            children: [
+              // TOP SECTION
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+
+                children: [
+                  Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+
+                    children: const [
+                      Text(
+                        'Hello 👋',
+
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight:
+                              FontWeight.bold,
+                        ),
+                      ),
+
+                      SizedBox(height: 8),
+
+                      Text(
+                        'Manage your daily todos',
+
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addTask,
-        child: const Icon(Icons.add),
+                  const CircleAvatar(
+                    radius: 28,
+
+                    backgroundColor: Colors.blue,
+
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 40),
+
+              // BANNER CARD
+              Container(
+                width: double.infinity,
+
+                padding: const EdgeInsets.all(20),
+
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFF4A80F0),
+                      Color(0xFF7F56D9),
+                    ],
+                  ),
+
+                  borderRadius:
+                      BorderRadius.circular(25),
+                ),
+
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.task_alt,
+                      size: 60,
+                      color: Colors.white,
+                    ),
+
+                    const SizedBox(width: 20),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
+
+                        children: const [
+                          Text(
+                            'Track Your Tasks',
+
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight:
+                                  FontWeight.bold,
+                            ),
+                          ),
+
+                          SizedBox(height: 10),
+
+                          Text(
+                            'Complete your daily goals easily.',
+
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              const Text(
+                'Todo Views',
+
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // LISTVIEW CARD
+              GestureDetector(
+                onTap: () {
+                  context.push('/todo-list');
+                },
+
+                child: Container(
+                  width: double.infinity,
+
+                  padding: const EdgeInsets.all(20),
+
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+
+                    borderRadius:
+                        BorderRadius.circular(25),
+
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black
+                            .withValues(
+                              alpha: 0.05,
+                            ),
+
+                        blurRadius: 10,
+
+                        offset: const Offset(
+                          0,
+                          5,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  child: Row(
+                    children: [
+                      Container(
+                        padding:
+                            const EdgeInsets.all(
+                              18,
+                            ),
+
+                        decoration: BoxDecoration(
+                          color: Colors.blue
+                              .withValues(
+                                alpha: 0.1,
+                              ),
+
+                          borderRadius:
+                              BorderRadius.circular(
+                                18,
+                              ),
+                        ),
+
+                        child: const Icon(
+                          Icons.view_list_rounded,
+
+                          color: Colors.blue,
+
+                          size: 40,
+                        ),
+                      ),
+
+                      const SizedBox(width: 20),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment
+                                  .start,
+
+                          children: const [
+                            Text(
+                              'ListView Todos',
+
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight:
+                                    FontWeight.bold,
+                              ),
+                            ),
+
+                            SizedBox(height: 8),
+
+                            Text(
+                              'View todos.',
+
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.grey,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    );
-  }
-
-  // ADD TASK
-  void _addTask() {
-    final titleController = TextEditingController();
-    final descController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: const Text("Add Task"),
-
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(
-                  hintText: "Title",
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              TextField(
-                controller: descController,
-                decoration: const InputDecoration(
-                  hintText: "Description",
-                ),
-              ),
-            ],
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () => context.pop(),
-              child: const Text("Cancel"),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                final user = FirebaseAuth.instance.currentUser;
-
-                if (user == null) return;
-
-                final todo = Todo((b) => b
-                  ..id = DateTime.now()
-                      .millisecondsSinceEpoch
-                      .toString()
-                  ..title = titleController.text.trim()
-                  ..description = descController.text.trim()
-                  ..userId = user.uid
-                  ..createdAt =
-                      DateTime.now().millisecondsSinceEpoch
-                  ..status = TodoStatus.pending);
-
-                ref.todoActions.addTodo(todo: todo);
-
-                context.pop();
-              },
-              child: const Text("Add"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // EDIT TASK
-  void _editTask(Todo todo) {
-    final titleController =
-        TextEditingController(text: todo.title);
-
-    final descController =
-        TextEditingController(text: todo.description);
-
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: const Text("Edit Task"),
-
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(
-                  hintText: "Title",
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              TextField(
-                controller: descController,
-                decoration: const InputDecoration(
-                  hintText: "Description",
-                ),
-              ),
-            ],
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () => context.pop(),
-              child: const Text("Cancel"),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                final updated = todo.rebuild((b) => b
-                  ..title = titleController.text.trim()
-                  ..description =
-                      descController.text.trim());
-
-                ref.todoActions.updateTodo(todo: updated);
-
-                context.pop();
-              },
-              child: const Text("Save"),
-            ),
-          ],
-        );
-      },
     );
   }
 }

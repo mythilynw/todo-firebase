@@ -1,8 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todo/views/screens/home_screen.dart';
 import '../../views/screens/login_screen.dart';
 import '../../views/screens/register_screen.dart';
-import '../../views/screens/home_screen.dart';
+import '../../views/screens/todo_list_screen.dart';
+
 
 
 final GoRouter appRouter = GoRouter(
@@ -41,6 +43,20 @@ final GoRouter appRouter = GoRouter(
       path: '/home',
       builder: (context, state) => const HomeScreen(),
     ),
-    
+ GoRoute(
+      path: '/',
+
+      builder: (context, state) {
+        return const HomeScreen();
+      },
+    ),
+
+    GoRoute(
+      path: '/todo-list',
+
+      builder: (context, state) {
+        return const TodoListScreen();
+      },
+    ),
   ],
-);
+); 

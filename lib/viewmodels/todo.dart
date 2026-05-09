@@ -11,19 +11,19 @@ class TodoViewModel extends StateNotifier<List<Todo>> {
 
   final TodoServiceImpl _service = TodoServiceImpl();
 
-  // LOAD TODOS
+  // LOAD 
   Future<void> loadTodos({required String userId}) async {
     final todos = await _service.getTodos(userId: userId);
     state = todos;
   }
 
-  // ADD TODO
+  // ADD 
   Future<void> addTodo({required Todo todo}) async {
     await _service.addTodo(todo: todo);
     state = [...state, todo];
   }
 
-  // UPDATE TODO
+  // UPDATE 
   Future<void> updateTodo({required Todo todo}) async {
     await _service.updateTodo(todo: todo);
 
@@ -33,7 +33,7 @@ class TodoViewModel extends StateNotifier<List<Todo>> {
     ];
   }
 
-  //DELETE TODO
+  //DELETE 
   Future<void> deleteTodo({required String id}) async {
     await _service.deleteTodo(id: id);
 
