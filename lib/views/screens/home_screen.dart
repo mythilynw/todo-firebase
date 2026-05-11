@@ -1,212 +1,154 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+import 'todo_grid_screen.dart';
+import 'todo_list_screen.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({
+    super.key,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  State<HomeScreen> createState() =>
+      _HomeScreenState();
+}
+
+class _HomeScreenState
+    extends State<HomeScreen> {
+  bool isGridView = false;
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FB),
+      backgroundColor:
+          const Color(0xFFF5F7FB),
 
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-
-          child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
-
-            children: [
-              // TOP SECTION
-              Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-
-                children: [
-                  Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
-
-                    children: const [
-                      Text(
-                        'Hello 👋',
-
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight:
-                              FontWeight.bold,
-                        ),
-                      ),
-
-                      SizedBox(height: 8),
-
-                      Text(
-                        'Manage your daily todos',
-
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const CircleAvatar(
-                    radius: 28,
-
-                    backgroundColor: Colors.blue,
-
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 40),
-
-              // BANNER CARD
-              Container(
-                width: double.infinity,
-
-                padding: const EdgeInsets.all(20),
-
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF4A80F0),
-                      Color(0xFF7F56D9),
-                    ],
-                  ),
-
-                  borderRadius:
-                      BorderRadius.circular(25),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding:
+                const EdgeInsets.all(
+                  20,
                 ),
 
-                child: Row(
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment
+                      .start,
+
+              children: [
+                /// TOP SECTION
+
+                Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment
+                          .spaceBetween,
+
                   children: [
-                    const Icon(
-                      Icons.task_alt,
-                      size: 60,
-                      color: Colors.white,
+                    Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment
+                              .start,
+
+                      children: const [
+                        Text(
+                          'Hello 👋',
+
+                          style: TextStyle(
+                            fontSize: 30,
+
+                            fontWeight:
+                                FontWeight
+                                    .bold,
+                          ),
+                        ),
+
+                        SizedBox(
+                          height: 8,
+                        ),
+
+                        Text(
+                          'Manage your daily todos',
+
+                          style: TextStyle(
+                            fontSize: 16,
+
+                            color:
+                                Colors.grey,
+                          ),
+                        ),
+                      ],
                     ),
 
-                    const SizedBox(width: 20),
+                    const CircleAvatar(
+                      radius: 28,
 
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                      backgroundColor:
+                          Colors.blue,
 
-                        children: const [
-                          Text(
-                            'Track Your Tasks',
+                      child: Icon(
+                        Icons.person,
 
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight:
-                                  FontWeight.bold,
-                            ),
-                          ),
+                        color:
+                            Colors.white,
 
-                          SizedBox(height: 10),
-
-                          Text(
-                            'Complete your daily goals easily.',
-
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                        size: 30,
                       ),
                     ),
                   ],
                 ),
-              ),
 
-              const SizedBox(height: 40),
-
-              const Text(
-                'Todo Views',
-
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(
+                  height: 30,
                 ),
-              ),
 
-              const SizedBox(height: 20),
+                /// BANNER CARD
 
-              // LISTVIEW CARD
-              GestureDetector(
-                onTap: () {
-                  context.push('/todo-list');
-                },
+                Container(
+                  width:
+                      double.infinity,
 
-                child: Container(
-                  width: double.infinity,
-
-                  padding: const EdgeInsets.all(20),
+                  padding:
+                      const EdgeInsets.all(
+                        20,
+                      ),
 
                   decoration: BoxDecoration(
-                    color: Colors.white,
-
-                    borderRadius:
-                        BorderRadius.circular(25),
-
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black
-                            .withValues(
-                              alpha: 0.05,
+                    gradient:
+                        const LinearGradient(
+                          colors: [
+                            Color(
+                              0xFF4A80F0,
                             ),
 
-                        blurRadius: 10,
-
-                        offset: const Offset(
-                          0,
-                          5,
+                            Color(
+                              0xFF7F56D9,
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+
+                    borderRadius:
+                        BorderRadius.circular(
+                          25,
+                        ),
                   ),
 
                   child: Row(
                     children: [
-                      Container(
-                        padding:
-                            const EdgeInsets.all(
-                              18,
-                            ),
+                      const Icon(
+                        Icons.task_alt,
 
-                        decoration: BoxDecoration(
-                          color: Colors.blue
-                              .withValues(
-                                alpha: 0.1,
-                              ),
+                        size: 60,
 
-                          borderRadius:
-                              BorderRadius.circular(
-                                18,
-                              ),
-                        ),
-
-                        child: const Icon(
-                          Icons.view_list_rounded,
-
-                          color: Colors.blue,
-
-                          size: 40,
-                        ),
+                        color:
+                            Colors.white,
                       ),
 
-                      const SizedBox(width: 20),
+                      const SizedBox(
+                        width: 20,
+                      ),
 
                       Expanded(
                         child: Column(
@@ -216,38 +158,270 @@ class HomeScreen extends StatelessWidget {
 
                           children: const [
                             Text(
-                              'ListView Todos',
+                              'Track Your Tasks',
 
                               style: TextStyle(
-                                fontSize: 22,
+                                color:
+                                    Colors
+                                        .white,
+
+                                fontSize:
+                                    24,
+
                                 fontWeight:
-                                    FontWeight.bold,
+                                    FontWeight
+                                        .bold,
                               ),
                             ),
 
-                            SizedBox(height: 8),
+                            SizedBox(
+                              height: 10,
+                            ),
 
                             Text(
-                              'View todos.',
+                              'Complete your daily goals easily.',
 
                               style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 15,
+                                color:
+                                    Colors
+                                        .white70,
+
+                                fontSize:
+                                    15,
                               ),
                             ),
                           ],
                         ),
                       ),
-
-                      const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.grey,
-                      ),
                     ],
                   ),
                 ),
-              ),
-            ],
+
+                const SizedBox(
+                  height: 30,
+                ),
+
+                /// TITLE + TOGGLE BUTTONS
+
+                Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment
+                          .spaceBetween,
+
+                  children: [
+                    const Text(
+                      'Todo Views',
+
+                      style: TextStyle(
+                        fontSize: 24,
+
+                        fontWeight:
+                            FontWeight.bold,
+                      ),
+                    ),
+
+                    Container(
+                      padding:
+                          const EdgeInsets.all(
+                            5,
+                          ),
+
+                      decoration: BoxDecoration(
+                        color:
+                            Colors.white,
+
+                        borderRadius:
+                            BorderRadius.circular(
+                              16,
+                            ),
+                      ),
+
+                      child: Row(
+                        children: [
+                          /// LIST VIEW BUTTON
+
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isGridView =
+                                    false;
+                              });
+                            },
+
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(
+                                    horizontal:
+                                        18,
+
+                                    vertical:
+                                        10,
+                                  ),
+
+                              decoration: BoxDecoration(
+                                color:
+                                    !isGridView
+                                    ? Colors
+                                        .blue
+                                    : Colors
+                                        .transparent,
+
+                                borderRadius:
+                                    BorderRadius.circular(
+                                      12,
+                                    ),
+                              ),
+
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons
+                                        .view_list_rounded,
+
+                                    color:
+                                        !isGridView
+                                        ? Colors
+                                            .white
+                                        : Colors
+                                            .grey,
+                                  ),
+
+                                  const SizedBox(
+                                    width:
+                                        8,
+                                  ),
+
+                                  Text(
+                                    'List',
+
+                                    style: TextStyle(
+                                      color:
+                                          !isGridView
+                                          ? Colors
+                                              .white
+                                          : Colors
+                                              .grey,
+
+                                      fontWeight:
+                                          FontWeight
+                                              .bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(
+                            width: 6,
+                          ),
+
+                          /// GRID VIEW BUTTON
+
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isGridView =
+                                    true;
+                              });
+                            },
+
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(
+                                    horizontal:
+                                        18,
+
+                                    vertical:
+                                        10,
+                                  ),
+
+                              decoration: BoxDecoration(
+                                color:
+                                    isGridView
+                                    ? Colors
+                                        .purple
+                                    : Colors
+                                        .transparent,
+
+                                borderRadius:
+                                    BorderRadius.circular(
+                                      12,
+                                    ),
+                              ),
+
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons
+                                        .grid_view_rounded,
+
+                                    color:
+                                        isGridView
+                                        ? Colors
+                                            .white
+                                        : Colors
+                                            .grey,
+                                  ),
+
+                                  const SizedBox(
+                                    width:
+                                        8,
+                                  ),
+
+                                  Text(
+                                    'Grid',
+
+                                    style: TextStyle(
+                                      color:
+                                          isGridView
+                                          ? Colors
+                                              .white
+                                          : Colors
+                                              .grey,
+
+                                      fontWeight:
+                                          FontWeight
+                                              .bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                /// SCREEN VIEW
+
+                SizedBox(
+                  height:
+                      MediaQuery.of(context)
+                          .size
+                          .height,
+
+                  child:
+                      AnimatedSwitcher(
+                        duration:
+                            const Duration(
+                              milliseconds:
+                                  300,
+                            ),
+
+                        child: isGridView
+                            ? const TodoGridScreen()
+                            : const TodoListScreen(),
+                      ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

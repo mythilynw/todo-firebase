@@ -4,6 +4,7 @@ import 'package:todo/views/screens/home_screen.dart';
 import '../../views/screens/login_screen.dart';
 import '../../views/screens/register_screen.dart';
 import '../../views/screens/todo_list_screen.dart';
+import '../../views/screens/todo_grid_screen.dart';
 
 
 
@@ -58,5 +59,13 @@ final GoRouter appRouter = GoRouter(
         return const TodoListScreen();
       },
     ),
+    GoRoute(
+      path: '/todo-board',
+
+      builder: (context, state) {
+        return const TodoGridScreen();
+      },
+    ),
+    
   ],
 ); 
