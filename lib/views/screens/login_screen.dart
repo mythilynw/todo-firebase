@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:go_router/go_router.dart';
-
-import '../../extensions/extensions.dart';
-
+import '../../viewmodels/auth/auth_viewmodel.dart';
 import '../widgets/custom_textformfield.dart';
 
 class LoginScreen
@@ -47,11 +43,14 @@ class _LoginScreenState
     String? value,
   ) {
 
-    if (value == null || value.isEmpty) {
+    if (value == null ||
+        value.isEmpty) {
+
       return 'Enter email';
     }
 
     if (!value.contains('@')) {
+
       return 'Invalid email';
     }
 
@@ -62,11 +61,14 @@ class _LoginScreenState
     String? value,
   ) {
 
-    if (value == null || value.isEmpty) {
+    if (value == null ||
+        value.isEmpty) {
+
       return 'Enter password';
     }
 
     if (value.length < 6) {
+
       return 'Minimum 6 characters';
     }
 
@@ -75,18 +77,27 @@ class _LoginScreenState
 
   Future<void> handleLogin() async {
 
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!
+        .validate()) {
 
       try {
 
-        await ref.authActions.login(
-          email:
-              emailController.text.trim(),
+        await ref
+            .read(
+              authViewModelProvider
+                  .notifier,
+            )
+            .login(
 
-          password:
-              passwordController.text
-                  .trim(),
-        );
+              email:
+                  emailController.text
+                      .trim(),
+
+              password:
+                  passwordController
+                      .text
+                      .trim(),
+            );
 
         if (!mounted) return;
 
@@ -98,6 +109,7 @@ class _LoginScreenState
 
         ScaffoldMessenger.of(context)
             .showSnackBar(
+
           SnackBar(
             content: Text(
               e.toString(),
@@ -109,20 +121,24 @@ class _LoginScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
 
     final isLoading =
-        ref.authLoading;
+        ref.watch(
+          authViewModelProvider,
+        );
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Login',
-        ),
-      ),
+
+      backgroundColor:
+          const Color(0xFFF5F7FB),
 
       body: SafeArea(
+
         child: LayoutBuilder(
+
           builder: (
             context,
             constraints,
@@ -132,18 +148,22 @@ class _LoginScreenState
                 constraints.maxWidth;
 
             return SingleChildScrollView(
+
               child: ConstrainedBox(
+
                 constraints: BoxConstraints(
                   minHeight:
                       constraints.maxHeight,
                 ),
 
                 child: Center(
+
                   child: Container(
 
-                    width: width < 600
-                        ? width * 0.9
-                        : 500,
+                    width:
+                        width < 600
+                            ? width * 0.9
+                            : 450,
 
                     padding:
                         const EdgeInsets.all(
@@ -151,9 +171,11 @@ class _LoginScreenState
                     ),
 
                     child: Form(
+
                       key: _formKey,
 
                       child: Column(
+
                         mainAxisAlignment:
                             MainAxisAlignment
                                 .center,
@@ -164,6 +186,16 @@ class _LoginScreenState
 
                         children: [
 
+                          const Icon(
+                            Icons.lock_outline,
+                            size: 80,
+                            color: Colors.blue,
+                          ),
+
+                          const SizedBox(
+                            height: 20,
+                          ),
+
                           Text(
                             'Welcome Back',
 
@@ -173,11 +205,27 @@ class _LoginScreenState
                             style: TextStyle(
                               fontSize:
                                   width < 600
-                                      ? 28
-                                      : 36,
+                                      ? 30
+                                      : 38,
 
                               fontWeight:
                                   FontWeight.bold,
+                            ),
+                          ),
+
+                          const SizedBox(
+                            height: 10,
+                          ),
+
+                          const Text(
+                            'Login to continue',
+
+                            textAlign:
+                                TextAlign.center,
+
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
                             ),
                           ),
 
@@ -186,6 +234,7 @@ class _LoginScreenState
                           ),
 
                           CustomTextFormField(
+
                             controller:
                                 emailController,
 
@@ -196,10 +245,11 @@ class _LoginScreenState
                           ),
 
                           const SizedBox(
-                            height: 16,
+                            height: 18,
                           ),
 
                           CustomTextFormField(
+
                             controller:
                                 passwordController,
 
@@ -214,11 +264,12 @@ class _LoginScreenState
                           ),
 
                           const SizedBox(
-                            height: 24,
+                            height: 28,
                           ),
 
                           SizedBox(
-                            height: 50,
+
+                            height: 55,
 
                             child:
                                 ElevatedButton(
@@ -228,29 +279,77 @@ class _LoginScreenState
                                       ? null
                                       : handleLogin,
 
+                              style:
+                                  ElevatedButton.styleFrom(
+
+                                shape:
+                                    RoundedRectangleBorder(
+
+                                  borderRadius:
+                                      BorderRadius.circular(
+                                    14,
+                                  ),
+                                ),
+                              ),
+
                               child:
                                   isLoading
-                                      ? const CircularProgressIndicator()
+
+                                      ? const SizedBox(
+                                          width: 24,
+                                          height: 24,
+
+                                          child:
+                                              CircularProgressIndicator(
+                                            strokeWidth:
+                                                2,
+
+                                            color:
+                                                Colors.white,
+                                          ),
+                                        )
+
                                       : const Text(
                                           'Login',
+
+                                          style:
+                                              TextStyle(
+                                            fontSize:
+                                                18,
+                                          ),
                                         ),
                             ),
                           ),
 
                           const SizedBox(
-                            height: 12,
+                            height: 18,
                           ),
 
-                          TextButton(
-                            onPressed: () {
-                              context.go(
-                                '/register',
-                              );
-                            },
+                          Row(
 
-                            child: const Text(
-                              'Go to Register',
-                            ),
+                            mainAxisAlignment:
+                                MainAxisAlignment.center,
+
+                            children: [
+
+                              const Text(
+                                'Don’t have an account?',
+                              ),
+
+                              TextButton(
+
+                                onPressed: () {
+
+                                  context.go(
+                                    '/register',
+                                  );
+                                },
+
+                                child: const Text(
+                                  'Register',
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

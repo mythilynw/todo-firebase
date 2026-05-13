@@ -1,6 +1,7 @@
-import '../../models/user.dart';
+import '../../../models/user.dart';
 
 abstract class AuthService {
+
   Future<User> register({
     required String name,
     required String email,
@@ -13,4 +14,6 @@ abstract class AuthService {
   });
 
   Future<void> logout();
+
+  Future<User?> currentUser();
 }

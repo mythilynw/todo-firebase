@@ -1,27 +1,36 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:go_router/go_router.dart';
+
 import 'package:uuid/uuid.dart';
+
 import '../../colors/app_colors.dart';
+
 import '../../extensions/extensions.dart';
+
 import '../../models/todo.dart';
 import '../../models/todo_status.dart';
-import '../widgets/common_board_section.dart';
+
+import '../widgets/common_board_screen.dart';
 
 class TodoGridScreen
     extends ConsumerStatefulWidget {
+
   const TodoGridScreen({
     super.key,
   });
 
   @override
   ConsumerState<TodoGridScreen>
-  createState() =>
-      _TodoGridScreenState();
+      createState() =>
+          _TodoGridScreenState();
 }
 
 class _TodoGridScreenState
     extends ConsumerState<TodoGridScreen> {
+
   final _titleController =
       TextEditingController();
 
@@ -33,6 +42,7 @@ class _TodoGridScreenState
 
   @override
   void dispose() {
+
     _titleController.dispose();
 
     _descriptionController.dispose();
@@ -46,15 +56,19 @@ class _TodoGridScreenState
     List<Todo> todos,
     TodoStatus status,
   ) {
+
     return todos.where((todo) {
+
       return todo.status ==
           status;
+
     }).toList();
   }
 
   // ADD TODO
 
   Future<void> _addTodo() async {
+
     final title =
         _titleController.text.trim();
 
@@ -77,14 +91,23 @@ class _TodoGridScreenState
 
     final todo = Todo(
       (builder) => builder
-        ..id = const Uuid().v4()
-        ..title = title
+
+        ..id =
+            const Uuid().v4()
+
+        ..title =
+            title
+
         ..description =
             description
-        ..userId = userId
+
+        ..userId =
+            userId
+
         ..createdAt =
             DateTime.now()
                 .millisecondsSinceEpoch
+
         ..status =
             _selectedStatus,
     );
@@ -97,22 +120,29 @@ class _TodoGridScreenState
 
     _descriptionController.clear();
 
-    _selectedStatus =
-        TodoStatus.pending;
+    setState(() {
+
+      _selectedStatus =
+          TodoStatus.pending;
+    });
 
     if (mounted) {
+
       context.pop();
     }
   }
 
-  // SHOW ADD TASK DIALOG
+  // ADD TASK DIALOG
 
   void _showAddTaskDialog() {
+
     showDialog(
       context: context,
 
       builder: (context) {
+
         return AlertDialog(
+
           title: const Text(
             'Add Task',
           ),
@@ -122,15 +152,17 @@ class _TodoGridScreenState
                 MainAxisSize.min,
 
             children: [
+
               TextField(
+
                 controller:
                     _titleController,
 
                 decoration:
                     const InputDecoration(
-                      hintText:
-                          'Task Title',
-                    ),
+                  hintText:
+                      'Task Title',
+                ),
               ),
 
               const SizedBox(
@@ -138,14 +170,15 @@ class _TodoGridScreenState
               ),
 
               TextField(
+
                 controller:
                     _descriptionController,
 
                 decoration:
                     const InputDecoration(
-                      hintText:
-                          'Task Description',
-                    ),
+                  hintText:
+                      'Task Description',
+                ),
               ),
 
               const SizedBox(
@@ -153,35 +186,39 @@ class _TodoGridScreenState
               ),
 
               DropdownButtonFormField<
-                TodoStatus
-              >(
-               initialValue: _selectedStatus,
+                  TodoStatus>(
+
+                initialValue:
+                    _selectedStatus,
+
+                decoration:
+                    const InputDecoration(
+                  labelText:
+                      'Task Status',
+                ),
 
                 items:
-                    TodoStatus
-                        .values
+                    TodoStatus.values
                         .map((status) {
-                          return DropdownMenuItem(
-                            value:
-                                status,
 
-                            child: Text(
-                              status
-                                  .name,
-                            ),
-                          );
-                        })
-                        .toList(),
+                  return DropdownMenuItem(
 
-                onChanged: (
-                  value,
-                ) {
-                  if (value ==
-                      null) {
+                    value: status,
+
+                    child: Text(
+                      status.name,
+                    ),
+                  );
+                }).toList(),
+
+                onChanged: (value) {
+
+                  if (value == null) {
                     return;
                   }
 
                   setState(() {
+
                     _selectedStatus =
                         value;
                   });
@@ -191,9 +228,13 @@ class _TodoGridScreenState
           ),
 
           actions: [
+
             TextButton(
-              onPressed:
-                  context.pop,
+
+              onPressed: () {
+
+                context.pop();
+              },
 
               child: const Text(
                 'Cancel',
@@ -201,6 +242,7 @@ class _TodoGridScreenState
             ),
 
             ElevatedButton(
+
               onPressed:
                   _addTodo,
 
@@ -218,31 +260,122 @@ class _TodoGridScreenState
   Widget build(
     BuildContext context,
   ) {
-    final todos = ref.todos;
+
+    final todos =
+        ref.todos;
 
     final completedTodos =
         _filterTodos(
-          todos,
-          TodoStatus.completed,
-        );
+      todos,
+      TodoStatus.completed,
+    );
 
     final pendingTodos =
         _filterTodos(
-          todos,
-          TodoStatus.pending,
-        );
+      todos,
+      TodoStatus.pending,
+    );
 
     final progressTodos =
         _filterTodos(
-          todos,
-          TodoStatus.inProgress,
-        );
+      todos,
+      TodoStatus.inProgress,
+    );
+
+    final sections = [
+
+      TodoBoardSection(
+
+        title:
+            'ALL TODOS',
+
+        color:
+            AppColors.all,
+
+        icon:
+            Icons.list_alt,
+
+        tasks:
+            todos,
+
+        targetStatus:
+            null,
+
+        enableDrag:
+            true,
+      ),
+
+      TodoBoardSection(
+
+        title:
+            'DONE',
+
+        color:
+            AppColors.completed,
+
+        icon:
+            Icons.check_circle,
+
+        tasks:
+            completedTodos,
+
+        targetStatus:
+            TodoStatus.completed,
+
+        enableDrag:
+            true,
+      ),
+
+      TodoBoardSection(
+
+        title:
+            'PENDING',
+
+        color:
+            AppColors.pending,
+
+        icon:
+            Icons.radio_button_unchecked,
+
+        tasks:
+            pendingTodos,
+
+        targetStatus:
+            TodoStatus.pending,
+
+        enableDrag:
+            true,
+      ),
+
+      TodoBoardSection(
+
+        title:
+            'IN PROGRESS',
+
+        color:
+            AppColors.progress,
+
+        icon:
+            Icons.timelapse,
+
+        tasks:
+            progressTodos,
+
+        targetStatus:
+            TodoStatus.inProgress,
+
+        enableDrag:
+            true,
+      ),
+    ];
 
     return Scaffold(
+
       backgroundColor:
           AppColors.background,
 
       appBar: AppBar(
+
         elevation: 0,
 
         backgroundColor:
@@ -253,17 +386,22 @@ class _TodoGridScreenState
         ),
 
         actions: [
+
           Padding(
+
             padding:
                 const EdgeInsets.only(
-                  right: 20,
-                ),
+              right: 20,
+            ),
 
-            child: ElevatedButton.icon(
+            child:
+                ElevatedButton.icon(
+
               onPressed:
                   _showAddTaskDialog,
 
-              style: ElevatedButton.styleFrom(
+              style:
+                  ElevatedButton.styleFrom(
                 backgroundColor:
                     AppColors.all,
               ),
@@ -274,6 +412,7 @@ class _TodoGridScreenState
               ),
 
               label: const Text(
+
                 'Add Task',
 
                 style: TextStyle(
@@ -286,134 +425,45 @@ class _TodoGridScreenState
       ),
 
       body: Padding(
+
         padding:
             const EdgeInsets.all(
-              20,
-            ),
+          20,
+        ),
 
         child: LayoutBuilder(
+
           builder: (
             context,
             constraints,
           ) {
-            return Column(
-              children: [
-                Expanded(
-                  child: GridView.count(
-                    physics:
-                        const NeverScrollableScrollPhysics(),
 
-                    crossAxisCount:
-                        constraints.maxWidth <
-                                1100
-                            ? 2
-                            : 4,
+            return GridView.count(
 
-                    crossAxisSpacing:
-                        18,
+              crossAxisCount:
+                  constraints.maxWidth <
+                          1100
+                      ? 2
+                      : 4,
 
-                    mainAxisSpacing:
-                        18,
+              crossAxisSpacing:
+                  18,
 
-                    childAspectRatio:
-                        0.58,
+              mainAxisSpacing:
+                  18,
 
-                    children: [
-                      // ALL TODOS
+              childAspectRatio:
+                  0.58,
 
-                      CommonBoardSection(
-                        title:
-                            'ALL TODOS',
+              children:
+                  sections.map((section) {
 
-                        color:
-                            AppColors.all,
+                return CommonBoardSection(
 
-                        icon:
-                            Icons.list_alt,
+                  section: section,
+                );
 
-                        tasks: todos,
-
-                        targetStatus:
-                            null,
-
-                        enableDrag:
-                            true,
-                      ),
-
-                      // DONE
-
-                      CommonBoardSection(
-                        title:
-                            'DONE',
-
-                        color:
-                            AppColors.completed,
-
-                        icon:
-                            Icons.check_circle,
-
-                        tasks:
-                            completedTodos,
-
-                        targetStatus:
-                            TodoStatus
-                                .completed,
-
-                        enableDrag:
-                            true,
-                            
-              
-                      ),
-
-                      // PENDING
-
-                      CommonBoardSection(
-                        title:
-                            'PENDING',
-
-                        color:
-                            AppColors.pending,
-
-                        icon: Icons
-                            .radio_button_unchecked,
-
-                        tasks:
-                            pendingTodos,
-
-                        targetStatus:
-                            TodoStatus
-                                .pending,
-
-                        enableDrag:
-                            true,
-                      ),
-
-                      // IN PROGRESS
-
-                      CommonBoardSection(
-                        title:
-                            'IN PROGRESS',
-
-                        color:
-                            AppColors.progress,
-
-                        icon:
-                            Icons.timelapse,
-
-                        tasks:
-                            progressTodos,
-
-                        targetStatus:
-                            TodoStatus
-                                .inProgress,
-
-                        enableDrag:
-                            true,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              }).toList(),
             );
           },
         ),

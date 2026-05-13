@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../models/todo.dart';
-import 'todo_service.dart';
+import '../../../models/todo.dart';
+
+import '../todo/todo_service.dart';
 
 class FirebaseTodoService
-    implements TodoService{
+    implements TodoService {
 
-  final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  final FirebaseFirestore
+      _firestore =
+          FirebaseFirestore.instance;
 
   @override
   Future<void> addTodo({
@@ -15,7 +17,7 @@ class FirebaseTodoService
   }) async {
 
     await _firestore
-        .collection('tasks')
+        .collection('todos')
         .doc(todo.id)
         .set(
           todo.toJson(),
@@ -27,20 +29,21 @@ class FirebaseTodoService
     required String userId,
   }) async {
 
-    final snapshot = await _firestore
-        .collection('tasks')
-        .where(
-          'userId',
-          isEqualTo: userId,
-        )
-        .get();
+    final snapshot =
+        await _firestore
+            .collection('todos')
+            .where(
+              'userId',
+              isEqualTo: userId,
+            )
+            .get();
 
     return snapshot.docs
-        .map((doc) {
-          return Todo.fromJson(
+        .map(
+          (doc) => Todo.fromJson(
             doc.data(),
-          );
-        })
+          ),
+        )
         .toList();
   }
 
@@ -50,7 +53,7 @@ class FirebaseTodoService
   }) async {
 
     await _firestore
-        .collection('tasks')
+        .collection('todos')
         .doc(todo.id)
         .update(
           todo.toJson(),
@@ -63,7 +66,7 @@ class FirebaseTodoService
   }) async {
 
     await _firestore
-        .collection('tasks')
+        .collection('todos')
         .doc(id)
         .delete();
   }

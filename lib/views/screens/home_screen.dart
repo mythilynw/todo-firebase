@@ -261,10 +261,10 @@ class _HomeScreenState
                               decoration: BoxDecoration(
                                 color:
                                     !isGridView
-                                    ? Colors
-                                        .blue
-                                    : Colors
-                                        .transparent,
+                                        ? Colors
+                                            .blue
+                                        : Colors
+                                            .transparent,
 
                                 borderRadius:
                                     BorderRadius.circular(
@@ -280,10 +280,10 @@ class _HomeScreenState
 
                                     color:
                                         !isGridView
-                                        ? Colors
-                                            .white
-                                        : Colors
-                                            .grey,
+                                            ? Colors
+                                                .white
+                                            : Colors
+                                                .grey,
                                   ),
 
                                   const SizedBox(
@@ -297,10 +297,10 @@ class _HomeScreenState
                                     style: TextStyle(
                                       color:
                                           !isGridView
-                                          ? Colors
-                                              .white
-                                          : Colors
-                                              .grey,
+                                              ? Colors
+                                                  .white
+                                              : Colors
+                                                  .grey,
 
                                       fontWeight:
                                           FontWeight
@@ -339,10 +339,10 @@ class _HomeScreenState
                               decoration: BoxDecoration(
                                 color:
                                     isGridView
-                                    ? Colors
-                                        .purple
-                                    : Colors
-                                        .transparent,
+                                        ? Colors
+                                            .purple
+                                        : Colors
+                                            .transparent,
 
                                 borderRadius:
                                     BorderRadius.circular(
@@ -358,10 +358,10 @@ class _HomeScreenState
 
                                     color:
                                         isGridView
-                                        ? Colors
-                                            .white
-                                        : Colors
-                                            .grey,
+                                            ? Colors
+                                                .white
+                                            : Colors
+                                                .grey,
                                   ),
 
                                   const SizedBox(
@@ -375,10 +375,10 @@ class _HomeScreenState
                                     style: TextStyle(
                                       color:
                                           isGridView
-                                          ? Colors
-                                              .white
-                                          : Colors
-                                              .grey,
+                                              ? Colors
+                                                  .white
+                                              : Colors
+                                                  .grey,
 
                                       fontWeight:
                                           FontWeight
@@ -415,9 +415,10 @@ class _HomeScreenState
                                   300,
                             ),
 
-                        child: isGridView
-                            ? const TodoGridScreen()
-                            : const TodoListScreen(),
+                        child:
+                            isGridView
+                                ? const TodoGridScreen()
+                                : const TodoListScreen(),
                       ),
                 ),
               ],

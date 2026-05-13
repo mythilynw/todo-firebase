@@ -1,10 +1,12 @@
+// lib/views/screens/register_screen.dart
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:go_router/go_router.dart';
 
-import '../../extensions/extensions.dart';
+import '../../viewmodels/auth/auth_viewmodel.dart';
 
 import '../widgets/custom_textformfield.dart';
 
@@ -52,7 +54,9 @@ class _RegisterScreenState
     String? value,
   ) {
 
-    if (value == null || value.isEmpty) {
+    if (value == null ||
+        value.isEmpty) {
+
       return 'Enter name';
     }
 
@@ -63,11 +67,14 @@ class _RegisterScreenState
     String? value,
   ) {
 
-    if (value == null || value.isEmpty) {
+    if (value == null ||
+        value.isEmpty) {
+
       return 'Enter email';
     }
 
     if (!value.contains('@')) {
+
       return 'Invalid email';
     }
 
@@ -78,11 +85,14 @@ class _RegisterScreenState
     String? value,
   ) {
 
-    if (value == null || value.isEmpty) {
+    if (value == null ||
+        value.isEmpty) {
+
       return 'Enter password';
     }
 
     if (value.length < 6) {
+
       return 'Minimum 6 characters';
     }
 
@@ -91,21 +101,31 @@ class _RegisterScreenState
 
   Future<void> handleRegister() async {
 
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!
+        .validate()) {
 
       try {
 
-        await ref.authActions.register(
-          name:
-              nameController.text.trim(),
+        await ref
+            .read(
+              authViewModelProvider
+                  .notifier,
+            )
+            .register(
 
-          email:
-              emailController.text.trim(),
+              name:
+                  nameController.text
+                      .trim(),
 
-          password:
-              passwordController.text
-                  .trim(),
-        );
+              email:
+                  emailController.text
+                      .trim(),
+
+              password:
+                  passwordController
+                      .text
+                      .trim(),
+            );
 
         if (!mounted) return;
 
@@ -117,6 +137,7 @@ class _RegisterScreenState
 
         ScaffoldMessenger.of(context)
             .showSnackBar(
+
           SnackBar(
             content: Text(
               e.toString(),
@@ -128,20 +149,24 @@ class _RegisterScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
 
     final isLoading =
-        ref.authLoading;
+        ref.watch(
+          authViewModelProvider,
+        );
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Register',
-        ),
-      ),
+
+      backgroundColor:
+          const Color(0xFFF5F7FB),
 
       body: SafeArea(
+
         child: LayoutBuilder(
+
           builder: (
             context,
             constraints,
@@ -151,18 +176,22 @@ class _RegisterScreenState
                 constraints.maxWidth;
 
             return SingleChildScrollView(
+
               child: ConstrainedBox(
+
                 constraints: BoxConstraints(
                   minHeight:
                       constraints.maxHeight,
                 ),
 
                 child: Center(
+
                   child: Container(
 
-                    width: width < 600
-                        ? width * 0.9
-                        : 500,
+                    width:
+                        width < 600
+                            ? width * 0.9
+                            : 450,
 
                     padding:
                         const EdgeInsets.all(
@@ -170,35 +199,46 @@ class _RegisterScreenState
                     ),
 
                     child: Card(
+
                       elevation: 4,
 
                       shape:
                           RoundedRectangleBorder(
+
                         borderRadius:
                             BorderRadius.circular(
-                          20,
+                          24,
                         ),
                       ),
 
                       child: Padding(
+
                         padding:
                             const EdgeInsets.all(
                           24,
                         ),
 
                         child: Form(
+
                           key: _formKey,
 
                           child: Column(
-                            mainAxisAlignment:
-                                MainAxisAlignment
-                                    .center,
 
                             crossAxisAlignment:
                                 CrossAxisAlignment
                                     .stretch,
 
                             children: [
+
+                              const Icon(
+                                Icons.person_add_alt_1,
+                                size: 80,
+                                color: Colors.blue,
+                              ),
+
+                              const SizedBox(
+                                height: 20,
+                              ),
 
                               Text(
                                 'Create Account',
@@ -207,13 +247,30 @@ class _RegisterScreenState
                                     TextAlign.center,
 
                                 style: TextStyle(
+
                                   fontSize:
                                       width < 600
-                                          ? 28
-                                          : 36,
+                                          ? 30
+                                          : 38,
 
                                   fontWeight:
                                       FontWeight.bold,
+                                ),
+                              ),
+
+                              const SizedBox(
+                                height: 10,
+                              ),
+
+                              const Text(
+                                'Register to continue',
+
+                                textAlign:
+                                    TextAlign.center,
+
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
                                 ),
                               ),
 
@@ -222,6 +279,7 @@ class _RegisterScreenState
                               ),
 
                               CustomTextFormField(
+
                                 controller:
                                     nameController,
 
@@ -232,25 +290,26 @@ class _RegisterScreenState
                               ),
 
                               const SizedBox(
-                                height: 16,
+                                height: 18,
                               ),
 
                               CustomTextFormField(
+
                                 controller:
                                     emailController,
 
-                                label:
-                                    'Email',
+                                label: 'Email',
 
                                 validator:
                                     validateEmail,
                               ),
 
                               const SizedBox(
-                                height: 16,
+                                height: 18,
                               ),
 
                               CustomTextFormField(
+
                                 controller:
                                     passwordController,
 
@@ -265,11 +324,12 @@ class _RegisterScreenState
                               ),
 
                               const SizedBox(
-                                height: 24,
+                                height: 28,
                               ),
 
                               SizedBox(
-                                height: 50,
+
+                                height: 55,
 
                                 child:
                                     ElevatedButton(
@@ -279,29 +339,77 @@ class _RegisterScreenState
                                           ? null
                                           : handleRegister,
 
+                                  style:
+                                      ElevatedButton.styleFrom(
+
+                                    shape:
+                                        RoundedRectangleBorder(
+
+                                      borderRadius:
+                                          BorderRadius.circular(
+                                        14,
+                                      ),
+                                    ),
+                                  ),
+
                                   child:
                                       isLoading
-                                          ? const CircularProgressIndicator()
+
+                                          ? const SizedBox(
+                                              width: 24,
+                                              height: 24,
+
+                                              child:
+                                                  CircularProgressIndicator(
+                                                strokeWidth:
+                                                    2,
+
+                                                color:
+                                                    Colors.white,
+                                              ),
+                                            )
+
                                           : const Text(
                                               'Register',
+
+                                              style:
+                                                  TextStyle(
+                                                fontSize:
+                                                    18,
+                                              ),
                                             ),
                                 ),
                               ),
 
                               const SizedBox(
-                                height: 12,
+                                height: 18,
                               ),
 
-                              TextButton(
-                                onPressed: () {
-                                  context.go(
-                                    '/login',
-                                  );
-                                },
+                              Row(
 
-                                child: const Text(
-                                  'Already have account? Login',
-                                ),
+                                mainAxisAlignment:
+                                    MainAxisAlignment.center,
+
+                                children: [
+
+                                  const Text(
+                                    'Already have an account?',
+                                  ),
+
+                                  TextButton(
+
+                                    onPressed: () {
+
+                                      context.go(
+                                        '/login',
+                                      );
+                                    },
+
+                                    child: const Text(
+                                      'Login',
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const background =
+
+  static const Color background =
       Color(0xFFF4F7FC);
 
-  static const white =
+  static const Color white =
       Colors.white;
 
-  static const border =
+  static const Color border =
       Color(0xFFE2E8F0);
 
-  static const grey =
+  static const Color grey =
       Colors.grey;
 
-  static const pending =
+  static const Color pending =
       Colors.blue;
 
-  static const progress =
+  static const Color progress =
       Colors.orange;
 
-  static const completed =
+  static const Color completed =
       Colors.green;
 
-  static const all =
+  static const Color all =
       Colors.purple;
 }

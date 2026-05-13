@@ -1,6 +1,7 @@
-import '../../models/todo.dart';
+import '../../../models/todo.dart';
 
 abstract class TodoService {
+
   Future<void> addTodo({
     required Todo todo,
   });

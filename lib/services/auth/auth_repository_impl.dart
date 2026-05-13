@@ -6,6 +6,7 @@ import 'auth_repository.dart';
 
 class AuthRepositoryImpl
     implements AuthRepository {
+
   final AuthService authService;
 
   AuthRepositoryImpl({
@@ -18,6 +19,7 @@ class AuthRepositoryImpl
     required String email,
     required String password,
   }) async {
+
     return await authService.register(
       name: name,
       email: email,
@@ -30,6 +32,7 @@ class AuthRepositoryImpl
     required String email,
     required String password,
   }) async {
+
     return await authService.login(
       email: email,
       password: password,
@@ -38,6 +41,13 @@ class AuthRepositoryImpl
 
   @override
   Future<void> logout() async {
+
     await authService.logout();
+  }
+
+  @override
+  Future<User?> currentUser() async {
+
+    return await authService.currentUser();
   }
 }

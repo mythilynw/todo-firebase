@@ -2,30 +2,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/todo.dart';
 
-import '../providers/auth_provider.dart';
+import '../viewmodels/todo/todo_viewmodel.dart';
 
-import '../viewmodels/auth/auth_viewmodel.dart';
-import '../viewmodels/todo_viewmodel.dart';
+extension TodoRefExtension
+    on WidgetRef {
 
-extension RefExtension on WidgetRef {
+  // WATCH
 
-  //  AUTH 
-
-  // WATCH 
-  bool get authLoading =>
-      watch(authViewModelProvider);
-
-  // READ 
-  AuthViewModel get authActions =>
-      read(authViewModelProvider.notifier);
-
-  // TODO 
-
-  // WATCH 
   List<Todo> get todos =>
-      watch(todoProvider);
+      watch(
+        todoProvider,
+      );
 
-  // READ 
+  // READ
+
   TodoViewModel get todoActions =>
-      read(todoProvider.notifier);
+      read(
+        todoProvider.notifier,
+      );
 }

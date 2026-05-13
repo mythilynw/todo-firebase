@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
-
 import '../../colors/app_colors.dart';
 import '../../extensions/extensions.dart';
 import '../../models/todo.dart';
@@ -11,18 +10,20 @@ import '../widgets/common_section.dart';
 
 class TodoListScreen
     extends ConsumerStatefulWidget {
+
   const TodoListScreen({
     super.key,
   });
 
   @override
   ConsumerState<TodoListScreen>
-  createState() =>
-      _TodoListScreenState();
+      createState() =>
+          _TodoListScreenState();
 }
 
 class _TodoListScreenState
     extends ConsumerState<TodoListScreen> {
+
   final _titleController =
       TextEditingController();
 
@@ -34,21 +35,18 @@ class _TodoListScreenState
 
   bool _allExpanded = true;
 
-  bool _completedExpanded = false;
+  bool _completedExpanded =
+      false;
 
-  bool _progressExpanded = false;
+  bool _progressExpanded =
+      false;
 
-  bool _pendingExpanded = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _loadTodos();
-  }
+  bool _pendingExpanded =
+      false;
 
   @override
   void dispose() {
+
     _titleController.dispose();
 
     _descriptionController.dispose();
@@ -56,26 +54,10 @@ class _TodoListScreenState
     super.dispose();
   }
 
-  // LOAD TODOS
-
-  Future<void> _loadTodos() async {
-    final userId =
-        ref
-            .todoActions
-            .currentUserId;
-
-    if (userId == null) {
-      return;
-    }
-
-    await ref.todoActions.loadTodos(
-      userId: userId,
-    );
-  }
-
   // ADD TODO
 
   Future<void> _addTodo() async {
+
     final title =
         _titleController.text.trim();
 
@@ -98,14 +80,23 @@ class _TodoListScreenState
 
     final todo = Todo(
       (builder) => builder
-        ..id = const Uuid().v4()
-        ..title = title
+
+        ..id =
+            const Uuid().v4()
+
+        ..title =
+            title
+
         ..description =
             description
-        ..userId = userId
+
+        ..userId =
+            userId
+
         ..createdAt =
             DateTime.now()
                 .millisecondsSinceEpoch
+
         ..status =
             _selectedStatus,
     );
@@ -118,10 +109,14 @@ class _TodoListScreenState
 
     _descriptionController.clear();
 
-    _selectedStatus =
-        TodoStatus.pending;
+    setState(() {
+
+      _selectedStatus =
+          TodoStatus.pending;
+    });
 
     if (mounted) {
+
       context.pop();
     }
   }
@@ -131,8 +126,11 @@ class _TodoListScreenState
   Future<void> _deleteTodo(
     String id,
   ) async {
+
     await ref.todoActions
-        .deleteTodo(id: id);
+        .deleteTodo(
+      id: id,
+    );
   }
 
   // UPDATE STATUS
@@ -141,17 +139,20 @@ class _TodoListScreenState
     Todo todo,
     bool value,
   ) async {
-    final updatedTodo = todo.rebuild(
+
+    final updatedTodo =
+        todo.rebuild(
       (builder) =>
-          builder.status = value
-              ? TodoStatus.completed
-              : TodoStatus.pending,
+          builder.status =
+              value
+                  ? TodoStatus.completed
+                  : TodoStatus.pending,
     );
 
     await ref.todoActions
         .updateTodo(
-          todo: updatedTodo,
-        );
+      todo: updatedTodo,
+    );
   }
 
   // FILTER TODOS
@@ -160,20 +161,26 @@ class _TodoListScreenState
     List<Todo> todos,
     TodoStatus status,
   ) {
+
     return todos.where((todo) {
+
       return todo.status ==
           status;
+
     }).toList();
   }
 
   // SHOW ADD TODO DIALOG
 
   void _showAddTodoDialog() {
+
     showDialog(
       context: context,
 
       builder: (_) {
+
         return AlertDialog(
+
           title: const Text(
             'Add Todo',
           ),
@@ -183,15 +190,17 @@ class _TodoListScreenState
                 MainAxisSize.min,
 
             children: [
+
               TextField(
+
                 controller:
                     _titleController,
 
                 decoration:
                     const InputDecoration(
-                      hintText:
-                          'Enter title',
-                    ),
+                  hintText:
+                      'Enter title',
+                ),
               ),
 
               const SizedBox(
@@ -199,14 +208,15 @@ class _TodoListScreenState
               ),
 
               TextField(
+
                 controller:
                     _descriptionController,
 
                 decoration:
                     const InputDecoration(
-                      hintText:
-                          'Enter description',
-                    ),
+                  hintText:
+                      'Enter description',
+                ),
               ),
 
               const SizedBox(
@@ -214,43 +224,42 @@ class _TodoListScreenState
               ),
 
               DropdownButtonFormField<
-                TodoStatus
-              >(
-               initialValue: _selectedStatus,
+                  TodoStatus>(
+
+                initialValue:
+                    _selectedStatus,
 
                 decoration:
                     const InputDecoration(
-                      labelText:
-                          'Task Status',
-                    ),
+                  labelText:
+                      'Task Status',
+                ),
 
                 items:
-                    TodoStatus
-                        .values
-                        .map((
-                          status,
-                        ) {
-                          return DropdownMenuItem(
-                            value:
-                                status,
+                    TodoStatus.values
+                        .map((status) {
 
-                            child: Text(
-                              status
-                                  .name,
-                            ),
-                          );
-                        })
-                        .toList(),
+                  return DropdownMenuItem(
+
+                    value: status,
+
+                    child: Text(
+                      status.name,
+                    ),
+                  );
+                }).toList(),
 
                 onChanged: (
                   value,
                 ) {
+
                   if (value ==
                       null) {
                     return;
                   }
 
                   setState(() {
+
                     _selectedStatus =
                         value;
                   });
@@ -260,7 +269,9 @@ class _TodoListScreenState
           ),
 
           actions: [
+
             TextButton(
+
               onPressed:
                   context.pop,
 
@@ -270,6 +281,7 @@ class _TodoListScreenState
             ),
 
             ElevatedButton(
+
               onPressed:
                   _addTodo,
 
@@ -287,98 +299,146 @@ class _TodoListScreenState
   Widget build(
     BuildContext context,
   ) {
-    final todos = ref.todos;
+
+    final todos =
+        ref.todos;
 
     final completedTodos =
         _filterTodos(
-          todos,
-          TodoStatus.completed,
-        );
+      todos,
+      TodoStatus.completed,
+    );
 
     final progressTodos =
         _filterTodos(
-          todos,
-          TodoStatus.inProgress,
-        );
+      todos,
+      TodoStatus.inProgress,
+    );
 
     final pendingTodos =
         _filterTodos(
-          todos,
-          TodoStatus.pending,
-        );
+      todos,
+      TodoStatus.pending,
+    );
 
     final sections = [
-      {
-        'title': 'ALL TODO',
-        'color': AppColors.all,
-        'icon': Icons.list_alt,
-        'tasks': todos,
-        'expanded': _allExpanded,
-        'onTap': () {
+
+      TodoSection(
+
+        title:
+            'ALL TODO',
+
+        color:
+            AppColors.all,
+
+        icon:
+            Icons.list_alt,
+
+        tasks:
+            todos,
+
+        expanded:
+            _allExpanded,
+
+        onTap: () {
+
           setState(() {
+
             _allExpanded =
                 !_allExpanded;
           });
         },
-      },
-      {
-        'title': 'DONE',
-        'color':
+      ),
+
+      TodoSection(
+
+        title:
+            'DONE',
+
+        color:
             AppColors.completed,
-        'icon':
+
+        icon:
             Icons.check_circle,
-        'tasks':
+
+        tasks:
             completedTodos,
-        'expanded':
+
+        expanded:
             _completedExpanded,
-        'onTap': () {
+
+        onTap: () {
+
           setState(() {
+
             _completedExpanded =
                 !_completedExpanded;
           });
         },
-      },
-      {
-        'title': 'IN PROGRESS',
-        'color':
+      ),
+
+      TodoSection(
+
+        title:
+            'IN PROGRESS',
+
+        color:
             AppColors.progress,
-        'icon':
+
+        icon:
             Icons.timelapse,
-        'tasks':
+
+        tasks:
             progressTodos,
-        'expanded':
+
+        expanded:
             _progressExpanded,
-        'onTap': () {
+
+        onTap: () {
+
           setState(() {
+
             _progressExpanded =
                 !_progressExpanded;
           });
         },
-      },
-      {
-        'title': 'PENDING',
-        'color':
+      ),
+
+      TodoSection(
+
+        title:
+            'PENDING',
+
+        color:
             AppColors.pending,
-        'icon': Icons
-            .radio_button_unchecked,
-        'tasks':
+
+        icon:
+            Icons.radio_button_unchecked,
+
+        tasks:
             pendingTodos,
-        'expanded':
+
+        expanded:
             _pendingExpanded,
-        'onTap': () {
+
+        onTap: () {
+
           setState(() {
+
             _pendingExpanded =
                 !_pendingExpanded;
           });
         },
-      },
+      ),
     ];
 
     return Scaffold(
+
       backgroundColor:
           AppColors.background,
 
       appBar: AppBar(
+
         elevation: 0,
 
         backgroundColor:
@@ -391,65 +451,44 @@ class _TodoListScreenState
 
       floatingActionButton:
           FloatingActionButton(
-            onPressed:
-                _showAddTodoDialog,
 
-            backgroundColor:
-                AppColors.all,
+        onPressed:
+            _showAddTodoDialog,
 
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          ),
+        backgroundColor:
+            AppColors.all,
 
-      body: SingleChildScrollView(
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+
+      body:
+          SingleChildScrollView(
+
         padding:
             const EdgeInsets.all(
-              20,
-            ),
+          20,
+        ),
 
         child: Column(
+
           children:
-              List.generate(
-                sections.length,
-                (index) {
-                  final section =
-                      sections[index];
+              sections.map((section) {
 
-                  return CommonSection(
-                    title:
-                        section['title']
-                            as String,
+            return CommonSection(
 
-                    color:
-                        section['color']
-                            as Color,
+              section: section,
 
-                    icon:
-                        section['icon']
-                            as IconData,
+              onDelete:
+                  _deleteTodo,
 
-                    tasks:
-                        section['tasks']
-                            as List<Todo>,
+              onStatusChanged:
+                  _updateStatus,
+            );
 
-                    expanded:
-                        section['expanded']
-                            as bool,
-
-                    onTap:
-                        section['onTap']
-                            as VoidCallback,
-
-                    onDelete:
-                        _deleteTodo,
-
-                    onStatusChanged:
-                        _updateStatus,
-                  );
-                },
-              ),
+          }).toList(),
         ),
       ),
     );

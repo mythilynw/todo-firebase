@@ -1,52 +1,55 @@
 import '../../models/todo.dart';
 
-import '../../services/todo/firebase_todo_service.dart';
-import '../../services/todo/todo_service.dart';
+import '../../core/services/todo/todo_service.dart';
 
-import 'todo_repository.dart';
+class TodoRepositoryImpl {
 
-class TodoRepositoryImpl
-    implements TodoRepository {
+  final TodoService todoService;
 
-  final TodoService _service =
-      FirebaseTodoService();
+  TodoRepositoryImpl({
+    required this.todoService,
+  });
 
-  @override
+  // ADD TODO
+
   Future<void> addTodo({
     required Todo todo,
   }) async {
 
-    await _service.addTodo(
+    await todoService.addTodo(
       todo: todo,
     );
   }
 
-  @override
+  // GET TODOS
+
   Future<List<Todo>> getTodos({
     required String userId,
   }) async {
 
-    return await _service.getTodos(
+    return await todoService.getTodos(
       userId: userId,
     );
   }
 
-  @override
+  // UPDATE TODO
+
   Future<void> updateTodo({
     required Todo todo,
   }) async {
 
-    await _service.updateTodo(
+    await todoService.updateTodo(
       todo: todo,
     );
   }
 
-  @override
+  // DELETE TODO
+
   Future<void> deleteTodo({
     required String id,
   }) async {
 
-    await _service.deleteTodo(
+    await todoService.deleteTodo(
       id: id,
     );
   }

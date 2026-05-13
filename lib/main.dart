@@ -1,32 +1,56 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'core/router/app_router.dart';
-import 'firebase_options.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-void main() async {
+import 'core/router/app_router.dart';
+
+void main() {
+
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // LINUX / WINDOWS / MACOS
+
+  if (Platform.isLinux ||
+      Platform.isWindows ||
+      Platform.isMacOS) {
+
+    sqfliteFfiInit();
+
+    databaseFactory =
+        databaseFactoryFfi;
+  }
 
   runApp(
+
     const ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp
+    extends StatelessWidget {
+
+  const MyApp({
+    super.key,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
+
     return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: appRouter,
+
+      debugShowCheckedModeBanner:
+          false,
+
+      routerConfig:
+          appRouter,
     );
   }
 }

@@ -1,10 +1,19 @@
+
+
 import 'package:flutter/material.dart';
 
-class CustomTextFormField extends StatelessWidget {
-  final TextEditingController controller;
+class CustomTextFormField
+    extends StatelessWidget {
+
+  final TextEditingController
+      controller;
+
   final String label;
+
   final bool obscureText;
-  final String? Function(String?)? validator;
+
+  final String? Function(String?)?
+      validator;
 
   const CustomTextFormField({
     super.key,
@@ -15,14 +24,69 @@ class CustomTextFormField extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
+
     return TextFormField(
+
       controller: controller,
+
       obscureText: obscureText,
+
       validator: validator,
+
       decoration: InputDecoration(
+
         labelText: label,
-        border: OutlineInputBorder(),
+
+        filled: true,
+
+        fillColor: Colors.white,
+
+        contentPadding:
+            const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 18,
+        ),
+
+        border:
+            OutlineInputBorder(
+
+          borderRadius:
+              BorderRadius.circular(
+            14,
+          ),
+        ),
+
+        enabledBorder:
+            OutlineInputBorder(
+
+          borderRadius:
+              BorderRadius.circular(
+            14,
+          ),
+
+          borderSide:
+              const BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+
+        focusedBorder:
+            OutlineInputBorder(
+
+          borderRadius:
+              BorderRadius.circular(
+            14,
+          ),
+
+          borderSide:
+              const BorderSide(
+            color: Colors.blue,
+            width: 2,
+          ),
+        ),
       ),
     );
   }

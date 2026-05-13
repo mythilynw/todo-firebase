@@ -2,63 +2,114 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/user.dart';
 
-import '../../repositories/auth/auth_repository.dart';
+import '../../repositories/app_repository.dart';
+
+// APP REPOSITORY PROVIDER
+
+final appRepositoryProvider =
+    Provider<AppRepository>((ref) {
+
+  return AppRepository();
+});
+
+// AUTH PROVIDER
+
+final authViewModelProvider =
+    StateNotifierProvider<
+        AuthViewModel,
+        bool>((ref) {
+
+  return AuthViewModel(
+    appRepository:
+        ref.read(
+          appRepositoryProvider,
+        ),
+  );
+});
 
 class AuthViewModel
     extends StateNotifier<bool> {
-  final AuthRepository authRepository;
+
+  final AppRepository
+      appRepository;
 
   AuthViewModel({
-    required this.authRepository,
+    required this.appRepository,
   }) : super(false);
 
-  Future<User> register({
+  User? currentUser;
+
+  // REGISTER
+
+  Future<void> register({
     required String name,
     required String email,
     required String password,
   }) async {
-    try {
-      state = true;
 
-      final user =
-          await authRepository.register(
+    state = true;
+
+    try {
+
+      currentUser =
+          await appRepository.auth.register(
         name: name,
         email: email,
         password: password,
       );
 
-      return user;
     } finally {
+
       state = false;
     }
   }
 
-  Future<User> login({
+  // LOGIN
+
+  Future<void> login({
     required String email,
     required String password,
   }) async {
-    try {
-      state = true;
 
-      final user =
-          await authRepository.login(
+    state = true;
+
+    try {
+
+      currentUser =
+          await appRepository.auth.login(
         email: email,
         password: password,
       );
 
-      return user;
     } finally {
+
       state = false;
     }
   }
 
-  Future<void> logout() async {
-    try {
-      state = true;
+  // LOGOUT
 
-      await authRepository.logout();
+  Future<void> logout() async {
+
+    state = true;
+
+    try {
+
+      await appRepository.auth.logout();
+
+      currentUser = null;
+
     } finally {
+
       state = false;
     }
+  }
+
+  // CHECK USER
+
+  Future<void> checkUser() async {
+
+    currentUser =
+        await appRepository.auth.currentUser();
   }
 }
